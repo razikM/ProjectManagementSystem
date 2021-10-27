@@ -19,8 +19,8 @@ public class SkillDao implements Dao<Integer, Skill> {
     public void create(Skill entity) {
         try {
             ConnectionHandler.processVoidQuery("insert into skills(id, name, level)" +
-                    " values(" + entity.getId() + ", " + entity.getName() + ", "
-                    + entity.getLevel() + ")");
+                    " values(" + entity.getId() + ", '" + entity.getName() + "', '"
+                    + entity.getLevel() + "')");
         } catch (SQLException throwables) {
             LOGGER.error("Could not create a skill: " + entity.toString());
         }
@@ -53,8 +53,11 @@ public class SkillDao implements Dao<Integer, Skill> {
     @Override
     public void update(Skill update) {
         try {
-            ConnectionHandler.processVoidQuery("update skills set name = "
-                    + update.getName() + ", level = " + update.getLevel() + " where id = " + update.getId());
+            System.out.println("update skills set name = '"
+                    + update.getName() + "', level = '" + update.getLevel() + "' where id = " + update.getId());
+            ConnectionHandler.processVoidQuery("update skills set name = '"
+                    + update.getName() + "', level = '" + update.getLevel() + "' where id = " + update.getId() + ";");
+
         } catch (SQLException throwables) {
             LOGGER.error("Could not update a skill: " + update.toString());
         }

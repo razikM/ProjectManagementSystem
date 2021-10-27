@@ -16,7 +16,6 @@ public class App {
         DbMigration.migrate();
 
         runConsoleApp();
-
         LOGGER.info("END application");
     }
 

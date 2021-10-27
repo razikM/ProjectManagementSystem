@@ -19,7 +19,7 @@ public class CustomerDao implements Dao<Integer, Customer> {
     public void create(Customer entity) {
         try {
             ConnectionHandler.processVoidQuery("insert into customers(id, name, priority)" +
-                    " values(" + entity.getId() + ", " + entity.getName() + ", "
+                    " values(" + entity.getId() + ", '" + entity.getName() + "', "
                     + entity.getPriority() + ")");
         } catch (SQLException throwables) {
             LOGGER.error("Could not create a customer: " + entity.toString());
@@ -53,8 +53,8 @@ public class CustomerDao implements Dao<Integer, Customer> {
     @Override
     public void update(Customer update) {
         try {
-            ConnectionHandler.processVoidQuery("update customers set name = "
-                    + update.getName() + ", priority = " + update.getPriority() + " where id = " + update.getId());
+            ConnectionHandler.processVoidQuery("update customers set name = '"
+                    + update.getName() + "', priority = " + update.getPriority() + " where id = " + update.getId());
         } catch (SQLException throwables) {
             LOGGER.error("Could not update a customer: " + update.toString());
         }

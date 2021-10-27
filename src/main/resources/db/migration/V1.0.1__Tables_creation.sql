@@ -37,31 +37,47 @@ create table customers
 create table developers_projects
 (
     developer_id int,
-    foreign key (developer_id) references developers (id),
+    foreign key (developer_id) references developers (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     project_id   int,
     foreign key (project_id) references projects (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create table developers_skills
 (
     developer_id int,
-    foreign key (developer_id) references developers (id),
+    foreign key (developer_id) references developers (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     skill_id     int,
     foreign key (skill_id) references skills (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create table companies_projects
 (
     company_id int,
-    foreign key (company_id) references companies (id),
+    foreign key (company_id) references companies (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     project_id int,
     foreign key (project_id) references projects (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
 create table customers_projects
 (
     customer_id int,
-    foreign key (customer_id) references customers (id),
+    foreign key (customer_id) references customers (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
     project_id  int,
     foreign key (project_id) references projects (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 );

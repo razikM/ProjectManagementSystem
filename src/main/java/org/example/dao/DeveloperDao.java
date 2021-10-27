@@ -19,8 +19,8 @@ public class DeveloperDao implements Dao<Integer, Developer> {
     public void create(Developer entity) {
         try {
             ConnectionHandler.processVoidQuery("insert into developers(id, name, age, gender)" +
-                    " values(" + entity.getId() + ", " + entity.getName() + ", "
-                               + entity.getAge() + ", " + entity.getGender() + ")");
+                    " values(" + entity.getId() + ", '" + entity.getName() + "', "
+                               + entity.getAge() + ", '" + entity.getGender() + "')");
         } catch (SQLException throwables) {
             LOGGER.error("Could not create a developer: " + entity.toString());
         }
@@ -54,9 +54,9 @@ public class DeveloperDao implements Dao<Integer, Developer> {
     @Override
     public void update(Developer update) {
         try {
-            ConnectionHandler.processVoidQuery("update developers set name = "
-                    + update.getName() + ", age = " + update.getAge() + ", gender = "
-                    + update.getGender() + " where id = " + update.getId());
+            ConnectionHandler.processVoidQuery("update developers set name = '"
+                    + update.getName() + "', age = " + update.getAge() + ", gender = '"
+                    + update.getGender() + "' where id = " + update.getId());
         } catch (SQLException throwables) {
             LOGGER.error("Could not update a developer: " + update.toString());
         }
@@ -67,6 +67,7 @@ public class DeveloperDao implements Dao<Integer, Developer> {
         try {
             ConnectionHandler.processVoidQuery("delete from developers where id = " + id);
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
             LOGGER.error("Could not delete a developer with id " + id);
         }
     }

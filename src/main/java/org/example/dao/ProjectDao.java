@@ -19,8 +19,8 @@ public class ProjectDao implements Dao<Integer, Project> {
     public void create(Project entity) {
         try {
             ConnectionHandler.processVoidQuery("insert into projects(id, name, description)" +
-                    " values(" + entity.getId() + ", " + entity.getName() + ", "
-                    + entity.getDescription() + ")");
+                    " values(" + entity.getId() + ", '" + entity.getName() + "', '"
+                    + entity.getDescription() + "')");
         } catch (SQLException throwables) {
             LOGGER.error("Could not create a project: " + entity.toString());
         }
@@ -53,8 +53,8 @@ public class ProjectDao implements Dao<Integer, Project> {
     @Override
     public void update(Project update) {
         try {
-            ConnectionHandler.processVoidQuery("update projects set name = "
-                    + update.getName() + ", description = " + update.getDescription() + " where id = " + update.getId());
+            ConnectionHandler.processVoidQuery("update projects set name = '"
+                    + update.getName() + "', description = '" + update.getDescription() + "' where id = " + update.getId());
         } catch (SQLException throwables) {
             LOGGER.error("Could not update a project: " + update.toString());
         }

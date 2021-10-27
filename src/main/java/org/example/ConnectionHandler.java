@@ -28,7 +28,7 @@ public class ConnectionHandler {
 
     public static void processVoidQuery(String query) throws SQLException {
         Connection connection = DataSourceHolder.getDataSource().getConnection();
-        connection.createStatement().executeQuery(query);
+        connection.createStatement().execute(query);
     }
 
     public static Connection openConnection() throws SQLException {
