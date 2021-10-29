@@ -13,6 +13,11 @@ public class Project {
     private String description;
     private Date date;
 
+    public Project(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Project(String name, String description, Date date) {
         this.id = nextId;
         nextId++;

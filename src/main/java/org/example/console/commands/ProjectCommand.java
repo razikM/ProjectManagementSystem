@@ -6,6 +6,7 @@ import org.example.dao.ProjectDao;
 import org.example.model.Company;
 import org.example.model.Project;
 
+import java.sql.Date;
 import java.util.Arrays;
 
 public class ProjectCommand implements Command {
@@ -42,7 +43,7 @@ public class ProjectCommand implements Command {
             return;
         }
 
-        Project project = new Project(parameters[0], parameters[1]);
+        Project project = new Project(parameters[0], parameters[1], new Date(System.currentTimeMillis()));
         dao.create(project);
     }
 
@@ -61,8 +62,9 @@ public class ProjectCommand implements Command {
             return;
         }
 
-        Project project = new Project(parameters[1], parameters[2]);
-        project.setId(Integer.parseInt(parameters[0]));
+        Project project = dao.get(Integer.parseInt(parameters[0]));
+        project.setName(parameters[1]);
+        project.setDescription(parameters[2]);
 
         dao.update(project);
     }
@@ -79,9 +81,10 @@ public class ProjectCommand implements Command {
     private void printHelp(){
         System.out.println("[project] usage:");
         System.out.println("[operation] [mandatory_parameters]");
+        System.out.println("creation_date format is yyyy-mm-dd");
         System.out.println("[create] [name description]");
         System.out.println("[get] [id]");
-        System.out.println("[update] [id new_name new_description]");
+        System.out.println("[update] [id new_name new_description creation_date]");
         System.out.println("[delete] [id]");
     }
 }

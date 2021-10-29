@@ -35,12 +35,13 @@ public class DeveloperCommand implements Command {
     }
 
     private void create(String[] parameters){
-        if(parameters.length != 3){
+        if(parameters.length != 4){
             printHelp();
             return;
         }
 
-        Developer developer = new Developer(parameters[0], Integer.parseInt(parameters[1]), parameters[2]);
+        Developer developer = new Developer(parameters[0], Integer.parseInt(parameters[1]),
+                                            parameters[2],Integer.parseInt(parameters[3]));
         dao.create(developer);
     }
 
@@ -54,12 +55,13 @@ public class DeveloperCommand implements Command {
     }
 
     private void update(String[] parameters){
-        if(parameters.length != 4){
+        if(parameters.length != 5){
             printHelp();
             return;
         }
 
-        Developer developer = new Developer(parameters[1], Integer.parseInt(parameters[2]), parameters[3]);
+        Developer developer = new Developer(parameters[1], Integer.parseInt(parameters[2]),
+                                            parameters[3], Integer.parseInt(parameters[4]));
         developer.setId(Integer.parseInt(parameters[0]));
 
         dao.update(developer);
@@ -77,9 +79,9 @@ public class DeveloperCommand implements Command {
     private void printHelp(){
         System.out.println("[developer] usage:");
         System.out.println("[operation] [mandatory_parameters]");
-        System.out.println("[create] [name age gender]");
+        System.out.println("[create] [name age gender salary]");
         System.out.println("[get] [id]");
-        System.out.println("[update] [id new_name new_age new_gender]");
+        System.out.println("[update] [id new_name new_age new_gender salary]");
         System.out.println("[delete] [id]");
     }
 }
