@@ -18,9 +18,9 @@ public class DeveloperDao implements Dao<Integer, Developer> {
     @Override
     public void create(Developer entity) {
         try {
-            ConnectionHandler.processVoidQuery("insert into developers(id, name, age, gender)" +
+            ConnectionHandler.processVoidQuery("insert into developers(id, name, age, gender, salary)" +
                     " values(" + entity.getId() + ", '" + entity.getName() + "', "
-                               + entity.getAge() + ", '" + entity.getGender() + "')");
+                               + entity.getAge() + ", '" + entity.getGender() + "', " + entity.getSalary() + ");");
         } catch (SQLException throwables) {
             LOGGER.error("Could not create a developer: " + entity.toString());
         }
@@ -37,8 +37,9 @@ public class DeveloperDao implements Dao<Integer, Developer> {
             String name = resultSet.getString(2);
             int age = resultSet.getInt(3);
             String gender = resultSet.getString(4);
+            int salary = resultSet.getInt(5);
 
-            Developer developer = new Developer(name,age,gender);
+            Developer developer = new Developer(name,age,gender,salary);
             developer.setId(id);
 
             ConnectionHandler.closeConnection(connection);
@@ -56,7 +57,7 @@ public class DeveloperDao implements Dao<Integer, Developer> {
         try {
             ConnectionHandler.processVoidQuery("update developers set name = '"
                     + update.getName() + "', age = " + update.getAge() + ", gender = '"
-                    + update.getGender() + "' where id = " + update.getId());
+                    + update.getGender() + "', salary = " + update.getSalary() + " where id = " + update.getId() + ";");
         } catch (SQLException throwables) {
             LOGGER.error("Could not update a developer: " + update.toString());
         }
@@ -65,7 +66,7 @@ public class DeveloperDao implements Dao<Integer, Developer> {
     @Override
     public void delete(Integer id) {
         try {
-            ConnectionHandler.processVoidQuery("delete from developers where id = " + id);
+            ConnectionHandler.processVoidQuery("delete from developers where id = " + id + ";");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             LOGGER.error("Could not delete a developer with id " + id);

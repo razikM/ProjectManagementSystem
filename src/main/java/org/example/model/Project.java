@@ -2,6 +2,8 @@ package org.example.model;
 
 import org.example.ConnectionHandler;
 
+import java.sql.Date;
+
 public class Project {
 
     private static int nextId = ConnectionHandler.initializeIdWithMaxValue("projects") + 1;
@@ -9,12 +11,14 @@ public class Project {
     private int id;
     private String name;
     private String description;
+    private Date date;
 
-    public Project(String name, String description) {
+    public Project(String name, String description, Date date) {
         this.id = nextId;
         nextId++;
         this.name = name;
         this.description = description;
+        this.date = date;
     }
 
     public int getId() {
@@ -41,12 +45,21 @@ public class Project {
         this.description = description;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
-        return "Company{" +
+        return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", date=" + date +
                 '}';
     }
 }

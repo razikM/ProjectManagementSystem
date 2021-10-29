@@ -17,7 +17,7 @@ public class App {
     public static void main(String[] args) throws SQLException {
         LOGGER.debug("Start application");
         DbMigration.migrate();
-//        runConsoleApp();
+        runConsoleApp();
         LOGGER.info("END application");
     }
 

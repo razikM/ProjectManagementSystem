@@ -9,13 +9,15 @@ public class Developer {
     private String name;
     private int age;
     private String gender;
+    private int salary;
 
-    public Developer(String name, int age, String gender) {
+    public Developer(String name, int age, String gender, int salary) {
         this.id = nextId;
         nextId++;
         this.name = name;
         this.age = age;
         this.gender = gender;
+        this.salary = salary;
     }
 
     public int getId() {
@@ -50,6 +52,14 @@ public class Developer {
         this.gender = gender;
     }
 
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
     @Override
     public String toString() {
         return "Developer{" +
@@ -57,6 +67,7 @@ public class Developer {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
+                ", salary=" + salary +
                 '}';
     }
 }
