@@ -6,10 +6,9 @@ import org.example.ConnectionHandler;
 import org.example.model.Project;
 import org.example.model.Skill;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkillDao implements Dao<Integer, Skill> {
 
@@ -70,5 +69,35 @@ public class SkillDao implements Dao<Integer, Skill> {
         } catch (SQLException throwables) {
             LOGGER.error("Could not delete a skill with id " + id);
         }
+    }
+
+    @Override
+    public List<Skill> getAll() {
+        try {
+            Connection connection = ConnectionHandler.openConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from skills");
+
+            List<Skill> result = new ArrayList<>();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String level = resultSet.getString(3);
+
+                Skill skill = new Skill(name, level);
+                skill.setId(id);
+
+                result.add(skill);
+            }
+
+            ConnectionHandler.closeConnection(connection);
+
+            return result;
+        } catch (SQLException throwables) {
+            LOGGER.error("Could not get all skills");
+        }
+
+        throw new RuntimeException("Could not get all skills");
     }
 }

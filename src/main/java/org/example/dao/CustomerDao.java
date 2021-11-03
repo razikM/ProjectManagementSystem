@@ -3,6 +3,7 @@ package org.example.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.ConnectionHandler;
+import org.example.model.Company;
 import org.example.model.Customer;
 import org.example.model.Project;
 
@@ -10,6 +11,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDao implements Dao<Integer, Customer> {
 
@@ -67,5 +70,33 @@ public class CustomerDao implements Dao<Integer, Customer> {
         } catch (SQLException throwables) {
             LOGGER.error("Could not delete a customer with id " + id);
         }
+    }
+
+    @Override
+    public List<Customer> getAll() {
+        try {
+            Connection connection = ConnectionHandler.openConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from customers");
+
+            List<Customer> result = new ArrayList<>();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                int priority = resultSet.getInt(3);
+                Customer customer = new Customer(name, priority);
+                customer.setId(id);
+                result.add(customer);
+            }
+
+            ConnectionHandler.closeConnection(connection);
+
+            return result;
+        } catch (SQLException throwables) {
+            LOGGER.error("Could not get all customers");
+        }
+
+        throw new RuntimeException("Could not get all customers");
     }
 }

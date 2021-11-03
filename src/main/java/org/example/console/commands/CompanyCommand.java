@@ -5,8 +5,10 @@ import org.example.dao.CompanyDao;
 import org.example.dao.DeveloperDao;
 import org.example.model.Company;
 import org.example.model.Developer;
+import org.example.model.Skill;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class CompanyCommand implements Command {
 
@@ -14,7 +16,7 @@ public class CompanyCommand implements Command {
 
     @Override
     public void handle(String[] parameters) {
-        if(parameters.length < 2){
+        if(parameters.length < 1){
             printHelp();
             return;
         }
@@ -33,6 +35,9 @@ public class CompanyCommand implements Command {
 
             case "delete": delete(param);
                 break;
+
+            case "getAll": getAll();
+                break;
         }
     }
 
@@ -44,6 +49,7 @@ public class CompanyCommand implements Command {
 
         Company company = new Company(parameters[0], parameters[1]);
         dao.create(company);
+        System.out.println("The company was successfully created.");
     }
 
     private void get(String[] parameters){
@@ -53,6 +59,17 @@ public class CompanyCommand implements Command {
         }
 
         System.out.println(dao.get(Integer.parseInt(parameters[0])));
+    }
+
+    private void getAll() {
+        List<Company> result = dao.getAll();
+
+        if(result.isEmpty()){
+            System.out.println("There are no companies in the database");
+            return;
+        }
+
+        result.forEach(System.out :: println);
     }
 
     private void update(String[] parameters){
@@ -65,6 +82,7 @@ public class CompanyCommand implements Command {
         company.setId(Integer.parseInt(parameters[0]));
 
         dao.update(company);
+        System.out.println("The company was successfully updated.");
     }
 
     private void delete(String[] parameters){
@@ -74,6 +92,7 @@ public class CompanyCommand implements Command {
         }
 
         dao.delete(Integer.parseInt(parameters[0]));
+        System.out.println("The company was successfully deleted.");
     }
 
     private void printHelp(){

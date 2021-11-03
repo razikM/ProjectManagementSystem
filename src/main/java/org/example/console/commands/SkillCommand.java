@@ -4,9 +4,11 @@ import org.example.console.Command;
 import org.example.dao.CompanyDao;
 import org.example.dao.SkillDao;
 import org.example.model.Company;
+import org.example.model.Developer;
 import org.example.model.Skill;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class SkillCommand implements Command {
 
@@ -14,7 +16,7 @@ public class SkillCommand implements Command {
 
     @Override
     public void handle(String[] parameters) {
-        if(parameters.length < 2){
+        if(parameters.length < 1){
             printHelp();
             return;
         }
@@ -33,7 +35,21 @@ public class SkillCommand implements Command {
 
             case "delete": delete(param);
                 break;
+
+            case "getAll": getAll();
+                break;
         }
+    }
+
+    private void getAll() {
+        List<Skill> result = dao.getAll();
+
+        if(result.isEmpty()){
+            System.out.println("There are no skills in the database");
+            return;
+        }
+
+        result.forEach(System.out :: println);
     }
 
     private void create(String[] parameters){
@@ -44,6 +60,7 @@ public class SkillCommand implements Command {
 
         Skill skill = new Skill(parameters[0], parameters[1]);
         dao.create(skill);
+        System.out.println("The skill was successfully created.");
     }
 
     private void get(String[] parameters){
@@ -65,6 +82,7 @@ public class SkillCommand implements Command {
         skill.setId(Integer.parseInt(parameters[0]));
 
         dao.update(skill);
+        System.out.println("The skill was successfully updated.");
     }
 
     private void delete(String[] parameters){
@@ -74,6 +92,7 @@ public class SkillCommand implements Command {
         }
 
         dao.delete(Integer.parseInt(parameters[0]));
+        System.out.println("The skill was successfully deleted.");
     }
 
     private void printHelp(){
@@ -83,5 +102,6 @@ public class SkillCommand implements Command {
         System.out.println("[get] [id]");
         System.out.println("[update] [id new_name new_level]");
         System.out.println("[delete] [id]");
+        System.out.println("[getAll] - returns all skills");
     }
 }

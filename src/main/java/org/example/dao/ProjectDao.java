@@ -7,6 +7,8 @@ import org.example.model.Developer;
 import org.example.model.Project;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectDao implements Dao<Integer, Project> {
 
@@ -67,5 +69,61 @@ public class ProjectDao implements Dao<Integer, Project> {
         } catch (SQLException throwables) {
             LOGGER.error("Could not delete a project with id " + id);
         }
+    }
+
+    @Override
+    public List<Project> getAll() {
+        try {
+            Connection connection = ConnectionHandler.openConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from projects");
+
+            List<Project> result = new ArrayList<>();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String description = resultSet.getString(3);
+                Date date = resultSet.getDate(4);
+
+                Project project = new Project(name, description);
+                project.setId(id);
+                project.setDate(date);
+
+                result.add(project);
+            }
+
+            ConnectionHandler.closeConnection(connection);
+
+            return result;
+        } catch (SQLException throwables) {
+            LOGGER.error("Could not get all projects");
+        }
+
+        throw new RuntimeException("Could not get all projects");
+    }
+
+    public void listOfProjects(){
+        try {
+            Connection connection = ConnectionHandler.openConnection();
+            Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(
+                    "select concat(creation_date, ' - ', temp.n, ' - ',temp.result) as output \n" +
+                            "from (select projects.name as n, count(developer_id) as result from projects\n" +
+                            "join developers_projects as ds on projects.id = ds.project_id\n" +
+                            "join developers d on ds.developer_id = d.id\n" +
+                            "group by projects.name) as temp\n" +
+                            "join projects on temp.n = projects.name;");
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(1));
+            }
+
+            ConnectionHandler.closeConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

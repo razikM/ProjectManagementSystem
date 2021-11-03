@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompanyDao implements Dao<Integer, Company>{
 
@@ -67,5 +69,33 @@ public class CompanyDao implements Dao<Integer, Company>{
         } catch (SQLException throwables) {
             LOGGER.error("Could not delete a company with id " + id);
         }
+    }
+
+    @Override
+    public List<Company> getAll() {
+        try {
+            Connection connection = ConnectionHandler.openConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from companies");
+
+            List<Company> result = new ArrayList<>();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String description = resultSet.getString(3);
+                Company company = new Company(name, description);
+                company.setId(id);
+                result.add(company);
+            }
+
+            ConnectionHandler.closeConnection(connection);
+
+            return result;
+        } catch (SQLException throwables) {
+            LOGGER.error("Could not get all companies");
+        }
+
+        throw new RuntimeException("Could not get all companies");
     }
 }

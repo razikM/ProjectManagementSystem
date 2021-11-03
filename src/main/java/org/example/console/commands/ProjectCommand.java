@@ -8,6 +8,7 @@ import org.example.model.Project;
 
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.List;
 
 public class ProjectCommand implements Command {
 
@@ -15,7 +16,7 @@ public class ProjectCommand implements Command {
 
     @Override
     public void handle(String[] parameters) {
-        if(parameters.length < 2){
+        if(parameters.length < 1){
             printHelp();
             return;
         }
@@ -34,7 +35,28 @@ public class ProjectCommand implements Command {
 
             case "delete": delete(param);
                 break;
+
+            case "getAll": getAll();
+                break;
+
+            case "list": list();
+                break;
         }
+    }
+
+    private void list() {
+        dao.listOfProjects();
+    }
+
+    private void getAll() {
+        List<Project> result = dao.getAll();
+
+        if (result.isEmpty()){
+            System.out.println("There are no projects in the database.");
+            return;
+        }
+
+        result.forEach(System.out :: println);
     }
 
     private void create(String[] parameters){
@@ -45,6 +67,7 @@ public class ProjectCommand implements Command {
 
         Project project = new Project(parameters[0], parameters[1], new Date(System.currentTimeMillis()));
         dao.create(project);
+        System.out.println("A project was successfully created.");
     }
 
     private void get(String[] parameters){
@@ -67,6 +90,7 @@ public class ProjectCommand implements Command {
         project.setDescription(parameters[2]);
 
         dao.update(project);
+        System.out.println("A project was successfully updated.");
     }
 
     private void delete(String[] parameters){
@@ -76,6 +100,7 @@ public class ProjectCommand implements Command {
         }
 
         dao.delete(Integer.parseInt(parameters[0]));
+        System.out.println("A project was successfully deleted.");
     }
 
     private void printHelp(){
@@ -86,5 +111,7 @@ public class ProjectCommand implements Command {
         System.out.println("[get] [id]");
         System.out.println("[update] [id new_name new_description creation_date]");
         System.out.println("[delete] [id]");
+        System.out.println("[getAll] - returns all projects");
+        System.out.println("[list] - returns all projects in format: creation_date - name - # of developers");
     }
 }
